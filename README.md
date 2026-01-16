@@ -32,21 +32,6 @@ The easiest way to run this course is using **GitHub Codespaces**.
 2. Wait for the environment to build (it will automatically install all dependencies).
 3. Once the terminal is ready, the `myst-course-starter` environment will be active.
 
-### Best practices (pre-commit)
-
-If you clone the repository locally, it is recommended to install git hooks for automatic validation:
-
-```bash
-# Once the conda environment is activated
-pre-commit install
-```
-This will automatically validate the frontmatter when attempting to commit.
-
-> **Note:** If you need to skip these validations in an emergency:
-> - **Skip in a commit:** `git commit -n` (or `--no-verify`)
-> - **Uninstall hooks:** `pre-commit uninstall`
-> - **Disable configuration:** Rename the file: `mv .pre-commit-config.yaml .pre-commit-config.yaml.disabled`
-
 ## Project structure
 
 ```text
@@ -72,11 +57,18 @@ This separation allows component reuse and facilitates maintenance.
 
 
 
-## Reproducibility and local configuration
+## Getting Started (Local)
 
 To ensure a consistent development environment, this project uses Anaconda/Miniconda.
 
-### 1. Environment setup
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/myst-course-starter.git
+cd myst-course-starter
+```
+
+### 2. Environment setup
 ```bash
 # Create the environment from the configuration file
 conda env create -f environment.yml
@@ -189,6 +181,23 @@ Use it to:
 - Export the updated `planeamiento.json` to use with this template.
 - Preview your syllabus layout.
 
+
+## Deployment
+
+This template is configured to deploy automatically to GitHub Pages using GitHub Actions.
+
+### Configuration on GitHub
+
+1.  **Permissions**:
+    -   Go to **Settings** > **Actions** > **General**.
+    -   Under "Workflow permissions", select **Read and write permissions**.
+    -   Click **Save**.
+
+2.  **GitHub Pages**:
+    -   Go to **Settings** > **Pages**.
+    -   Under "Build and deployment" > "Source", select **GitHub Actions**.
+
+Once configured, every push to the `main` branch will trigger a deployment.
 
 ## AI assistance
 

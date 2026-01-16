@@ -32,20 +32,6 @@ La forma más sencilla de ejecutar este curso es utilizando **GitHub Codespaces*
 2. Espere a que el entorno se construya (instalará automáticamente todas las dependencias).
 3. Una vez lista la terminal, el entorno `frontmatter-academico` estará activo.
 
-### Buenas prácticas (pre-commit)
-
-Si clonas el repositorio localmente, se recomienda instalar los hooks de git para validación automática:
-
-```bash
-# Una vez activado el entorno conda
-pre-commit install
-```
-Esto validará el frontmatter automáticamente al intentar hacer un commit.
-
-> **Nota:** Si necesitas omitir estas validaciones en una emergencia:
-> - **Omitir en un commit:** `git commit -n` (o `--no-verify`)
-> - **Desinstalar hooks:** `pre-commit uninstall`
-> - **Desactivar configuración:** Renombra el archivo: `mv .pre-commit-config.yaml .pre-commit-config.yaml.disabled`
 
 ## Estructura del proyecto
 
@@ -72,11 +58,18 @@ Esta separación permite reutilizar componentes y facilita el mantenimiento.
 
 
 
-## Reproducibilidad y configuración local
+## Inicio Rápido (Local)
 
 Para garantizar un entorno de desarrollo consistente, este proyecto utiliza Anaconda/Miniconda.
 
-### 1. Configuración del entorno
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/TU_USUARIO/myst-course-starter.git
+cd myst-course-starter
+```
+
+### 2. Configuración del entorno
 ```bash
 # Crear el entorno desde el archivo de configuración
 conda env create -f environment.yml
@@ -188,6 +181,23 @@ El **Visor de Sílabo (Syllabus Viewer)** es una herramienta complementaria para
 - Exportar el `planeamiento.json` actualizado para usar con esta plantilla.
 - Previsualizar el diseño de su sílabo.
 
+
+## Despliegue
+
+Esta plantilla está configurada para desplegar automáticamente en GitHub Pages utilizando GitHub Actions.
+
+### Configuración en GitHub
+
+1.  **Permisos**:
+    -   Vaya a **Settings** > **Actions** > **General**.
+    -   Bajo "Workflow permissions", seleccione **Read and write permissions**.
+    -   Haga clic en **Save**.
+
+2.  **GitHub Pages**:
+    -   Vaya a **Settings** > **Pages**.
+    -   Bajo "Build and deployment" > "Source", seleccione **GitHub Actions**.
+
+Una vez configurado, cada push a la rama `main` activará un despliegue.
 
 ## Asistencia de IA
 
