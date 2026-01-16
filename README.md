@@ -30,7 +30,7 @@ It is ideal for educators who want a "Compliance-as-Code" approach, ensuring tha
 The easiest way to run this course is using **GitHub Codespaces**.
 1. Click on the "Open in GitHub Codespaces" button above.
 2. Wait for the environment to build (it will automatically install all dependencies).
-3. Once the terminal is ready, the `frontmatter-academico` environment will be active.
+3. Once the terminal is ready, the `myst-course-starter` environment will be active.
 
 ### Best practices (pre-commit)
 
