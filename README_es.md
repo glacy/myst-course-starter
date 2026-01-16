@@ -35,18 +35,30 @@ La forma más sencilla de ejecutar este curso es utilizando **GitHub Codespaces*
 
 ## Estructura del proyecto
 
+### 1. Estructura de la Plantilla (Estado Inicial)
+Antes de ejecutar los scripts de andamiaje, el repositorio contiene el motor central y la configuración:
+
 ```text
 myst-course-starter/
 ├── assets/                # 🎨 Recursos estáticos (logos, imágenes)
 ├── scripts/               # 🛠️ Scripts de mantenimiento y automatización
 ├── tests/                 # 🧪 Pruebas unitarias para los scripts
-├── myst.yml               # ⚙️ Configuración del sitio y metadatos globales
-├── programa.md            # 📄 Programa del curso
-├── planeamiento.json      # 📋 Datos estructurados del planeamiento 
-├── sessions/              # 📚 Contenido del curso (Capítulos)
-├── examples/              # 🧩 Ejemplos de referencia
-├── exercises/             # ✍️ Actividades prácticas
+├── planeamiento.json      # 📋 Datos estructurados del planeamiento (Tu Fuente de Verdad)
+├── environment.yml        # 📦 Configuración del entorno reproducible
 └── .github/               # 🤖 Flujos de automatización (CI/CD)
+```
+
+### 2. Estructura Andamiada (Después de Generar)
+Al ejecutar `python3 scripts/scaffold_course.py`, se genera el siguiente contenido basado en tu `planeamiento.json`:
+
+```text
+myst-course-starter/
+├── myst.yml               # ⚙️ Configuración del sitio auto-generada
+├── programa.md            # 📄 Programa del curso auto-generado
+├── sessions/              # 📚 Archivos Markdown de sesiones generados (Capítulos)
+├── activities/            # ✍️ Esqueletos de actividades generados
+├── examples/              # 🧩 Carpeta para ejemplos de referencia
+└── exercises/             # ✍️ Carpeta para ejercicios propuestos
 ```
 
 **Nota sobre la estructura de contenido:**
@@ -65,7 +77,7 @@ Para garantizar un entorno de desarrollo consistente, este proyecto utiliza Anac
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/TU_USUARIO/myst-course-starter.git
+git clone https://github.com/glacy/myst-course-starter.git
 cd myst-course-starter
 ```
 

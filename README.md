@@ -34,18 +34,30 @@ The easiest way to run this course is using **GitHub Codespaces**.
 
 ## Project structure
 
+### 1. Template Structure (Initial State)
+Before running the scaffolding scripts, the repository contains the core engine and configuration:
+
 ```text
 myst-course-starter/
 ├── assets/                # 🎨 Static resources (logos, images)
 ├── scripts/               # 🛠️ Maintenance and automation scripts
 ├── tests/                 # 🧪 Unit tests for scripts
-├── myst.yml               # ⚙️ Site configuration and global metadata
-├── programa.md            # 📄 Course program
-├── planeamiento.json      # 📋 Structured planning data 
-├── sessions/              # 📚 Course content (Chapters)
-├── examples/              # 🧩 Reference examples
-├── exercises/             # ✍️ Practical activities
+├── planeamiento.json      # 📋 Structured planning data (Your Single Source of Truth)
+├── environment.yml        # 📦 Reproducible environment configuration
 └── .github/               # 🤖 Automation workflows (CI/CD)
+```
+
+### 2. Scaffolded Structure (After Generation)
+Running `python3 scripts/scaffold_course.py` generates the following content based on your `planeamiento.json`:
+
+```text
+myst-course-starter/
+├── myst.yml               # ⚙️ Auto-generated site configuration
+├── programa.md            # 📄 Auto-generated Course Syllabus
+├── sessions/              # 📚 Generated Session Markdown files (Chapters)
+├── activities/            # ✍️ Generated Activity skeletons
+├── examples/              # 🧩 Folder for reference examples
+└── exercises/             # ✍️ Folder for proposed exercises
 ```
 
 **Note on content structure:**
@@ -64,7 +76,7 @@ To ensure a consistent development environment, this project uses Anaconda/Minic
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/myst-course-starter.git
+git clone https://github.com/glacy/myst-course-starter.git
 cd myst-course-starter
 ```
 
