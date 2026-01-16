@@ -136,27 +136,8 @@ python3 scripts/scaffold_course.py [--lang {es,en,fr}] [--force]
 -   `--lang`: Selecciona el idioma para el contenido generado, encabezados y mensajes de consola (por defecto: `es`). Soportado: `es`, `en`, `fr`.
 -   `--force`: Sobrescribe archivos existentes. **Incluye una confirmación interactiva para prevenir la pérdida accidental de datos.**
 
-### 4. Scripts Manuales/Individuales
-Si necesitas control granular, puedes ejecutar scripts individuales:
 
-- **Generar Sesiones:**
-  ```bash
-  python3 scripts/generate_sessions.py --lang en
-  ```
-- **Generar Actividades:**
-  ```bash
-  python3 scripts/generate_activities.py --lang fr
-  ```
-- **Generar Programa:**
-  ```bash
-  python3 scripts/generate_program.py --lang es
-  ```
-- **Inyectar Badges:**
-  ```bash
-  python3 scripts/inject_activity_header.py --lang en
-  ```
-
-### 3. Ejecución del servidor local
+### 4. Ejecución del servidor local
 
 Una vez configurado y verificado el entorno, puedes iniciar el servidor de desarrollo:
 
@@ -175,6 +156,26 @@ El **Visor de Sílabo (Syllabus Viewer)** es una herramienta complementaria para
 - Editar visualmente la estructura de su curso.
 - Exportar el `planeamiento.json` actualizado para usar con esta plantilla.
 - Previsualizar el diseño de su sílabo.
+
+### 6. Scripts Manuales/Individuales
+Si necesitas control granular, puedes ejecutar scripts individuales:
+
+- **Generar Sesiones:**
+  ```bash
+  python3 scripts/generate_sessions.py --lang en
+  ```
+- **Generar Actividades:**
+  ```bash
+  python3 scripts/generate_activities.py --lang fr
+  ```
+- **Generar Programa:**
+  ```bash
+  python3 scripts/generate_program.py --lang es
+  ```
+- **Inyectar Badges:**
+  ```bash
+  python3 scripts/inject_activity_header.py --lang en
+  ```
 
 
 ## Despliegue

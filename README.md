@@ -113,28 +113,8 @@ python3 scripts/scaffold_course.py [--lang {es,en,fr}] [--force]
 -   `--lang`: Selects the language for generated content, headers, and console output (default: `es`). Supported: `es`, `en`, `fr`.
 -   `--force`: Overwrites existing files. **Includes an interactive confirmation prompt to prevent accidental data loss.**
 
-### 4. Manual/Individual Scripts
-If you need granular control, you can run individual scripts:
 
-- **Generate Sessions:**
-  ```bash
-  python3 scripts/generate_sessions.py --lang en
-  ```
-- **Generate Activities:**
-  ```bash
-  python3 scripts/generate_activities.py --lang fr
-  ```
-- **Generate Program:**
-  ```bash
-  python3 scripts/generate_program.py --lang es
-  ```
-- **Inject Badges:**
-  ```bash
-  python3 scripts/inject_activity_header.py --lang en
-  ```
-
-
-### 3. Local server execution
+### 4. Local server execution
 
 Once the environment is configured and verified, you can start the development server:
 
@@ -153,6 +133,26 @@ Use it to:
 - Visually edit your course structure.
 - Export the updated `planeamiento.json` to use with this template.
 - Preview your syllabus layout.
+
+### 6. Manual/Individual Scripts
+If you need granular control, you can run individual scripts:
+
+- **Generate Sessions:**
+  ```bash
+  python3 scripts/generate_sessions.py --lang en
+  ```
+- **Generate Activities:**
+  ```bash
+  python3 scripts/generate_activities.py --lang fr
+  ```
+- **Generate Program:**
+  ```bash
+  python3 scripts/generate_program.py --lang es
+  ```
+- **Inject Badges:**
+  ```bash
+  python3 scripts/inject_activity_header.py --lang en
+  ```
 
 
 ## Deployment
