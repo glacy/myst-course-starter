@@ -89,46 +89,7 @@ conda env create -f environment.yml
 conda activate myst-course-starter
 ```
 
-### 2. Verification and validation
-Scripts are included to verify the integrity of the environment and content:
-
-- **Verify technical environment:**
-  ```bash
-  # Linux / macOS / WSL
-  ./scripts/verify_env.sh
-
-  # Windows (PowerShell)
-  .\scripts\verify_env.ps1
-  ```
-  Checks that all necessary tools (MyST, Pandoc, Python, etc.) are installed and accessible.
-
-- **Validate frontmatter:**
-  ```bash
-  python3 scripts/validate_frontmatter.py
-  ```
-  Analyzes all files in `sessions/` to ensure they comply with the required metadata structure. **Emits warnings (not errors)** for optional fields such as `activities`, `evaluation`, and `references`, allowing more flexible validation.
-
-- **Generate sessions table:**
-  ```bash
-  python3 scripts/generate_sessions_table_json.py
-  ```
-  Scans files in `sessions/` and automatically regenerates `sessions_table.md`.
-
-- **Skeleton generation:**
-  ```bash
-  # Synchronize myst.yml and generate sessions
-  python3 scripts/sync_myst.py
-  python3 scripts/generate_sessions.py
-
-  # Generate a specific week
-  python3 scripts/generate_sessions.py --week 1
-  
-  # Generate sessions in different languages
-  python3 scripts/generate_sessions.py --lang es  # Spanish (default)
-  python3 scripts/generate_sessions.py --lang en  # English
-  python3 scripts/generate_sessions.py --lang fr  # French
-  ```
-### 1. Course Scaffolding (Automated)
+### 3. Course Scaffolding (Automated)
 The `scaffold_course.py` script is the main entry point for generating the course structure. It orchestrates several steps to ensure a complete project setup:
 
 ```bash
@@ -152,7 +113,7 @@ python3 scripts/scaffold_course.py [--lang {es,en,fr}] [--force]
 -   `--lang`: Selects the language for generated content, headers, and console output (default: `es`). Supported: `es`, `en`, `fr`.
 -   `--force`: Overwrites existing files. **Includes an interactive confirmation prompt to prevent accidental data loss.**
 
-### 2. Manual/Individual Scripts
+### 4. Manual/Individual Scripts
 If you need granular control, you can run individual scripts:
 
 - **Generate Sessions:**
@@ -182,7 +143,7 @@ myst start
 ```
 The site will be available at `http://localhost:3000`.
 
-### 4. Interactive Syllabus Viewer
+### 5. Interactive Syllabus Viewer
 
 The **Syllabus Viewer** is a companion tool to visualize and edit the `planeamiento.json` file. It is now decoupled from this repository and available as a hosted application.
 

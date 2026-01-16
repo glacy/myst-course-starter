@@ -90,24 +90,7 @@ conda env create -f environment.yml
 conda activate myst-course-starter
 ```
 
-### 2. Verificación y validación
-Se incluyen scripts para verificar la integridad del entorno y el contenido:
 
-- **Verificar entorno técnico:**
-  ```bash
-  # Linux / macOS / WSL
-  ./scripts/verify_env.sh
-
-  # Windows (PowerShell)
-  .\scripts\verify_env.ps1
-  ```
-  Comprueba que todas las herramientas necesarias (MyST, Pandoc, Python, etc.) estén instaladas y accesibles.
-
-- **Validar frontmatter:**
-  ```bash
-  python3 scripts/validate_frontmatter.py
-  ```
-  Analiza todos los archivos en `sessions/` para asegurar que cumplen con la estructura de metadatos requerida. **Emite advertencias (no errores)** para campos opcionales como `activities`, `evaluation` y `references`, permitiendo una validación más flexible.
 
 - **Generar tabla de sesiones:**
   ```bash
@@ -129,7 +112,7 @@ Se incluyen scripts para verificar la integridad del entorno y el contenido:
   python3 scripts/generate_sessions.py --lang en  # Inglés
   python3 scripts/generate_sessions.py --lang fr  # Francés
   ```
-### 1. Andamiaje del Curso (Automatizado)
+### 3. Andamiaje del Curso (Automatizado)
 El script `scaffold_course.py` es el punto de entrada principal para generar la estructura del curso. Orquesta varios pasos para asegurar una configuración completa del proyecto:
 
 ```bash
@@ -153,7 +136,7 @@ python3 scripts/scaffold_course.py [--lang {es,en,fr}] [--force]
 -   `--lang`: Selecciona el idioma para el contenido generado, encabezados y mensajes de consola (por defecto: `es`). Soportado: `es`, `en`, `fr`.
 -   `--force`: Sobrescribe archivos existentes. **Incluye una confirmación interactiva para prevenir la pérdida accidental de datos.**
 
-### 2. Scripts Manuales/Individuales
+### 4. Scripts Manuales/Individuales
 Si necesitas control granular, puedes ejecutar scripts individuales:
 
 - **Generar Sesiones:**
@@ -182,7 +165,7 @@ myst start
 ```
 El sitio estará disponible en `http://localhost:3000`.
 
-### 4. Visor de Sílabo Interactivo
+### 5. Visor de Sílabo Interactivo
 
 El **Visor de Sílabo (Syllabus Viewer)** es una herramienta complementaria para visualizar y editar el archivo `planeamiento.json`. Ahora está desacoplado de este repositorio y disponible como una aplicación alojada.
 
