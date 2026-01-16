@@ -1,0 +1,23 @@
+{
+    "name": "Frontmatter Academico",
+    "image": "mcr.microsoft.com/devcontainers/miniconda:0-3",
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22",
+            "installNpm": "true"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "executablebookproject.myst-markdown",
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode"
+            ]
+        }
+    },
+    "updateContentCommand": "conda init && conda env create -f environment.yml || conda env update -f environment.yml --prune",
+    "postCreateCommand": "echo 'conda activate frontmatter-academico' >> ~/.bashrc"
+}

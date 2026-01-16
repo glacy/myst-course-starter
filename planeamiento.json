@@ -1,0 +1,127 @@
+{
+  "_jsdoc": "This is a mock syllabus for demonstration purposes. It follows the SD101 course structure.",
+  "metadata": {
+    "code": "SD101",
+    "title": "Semantic Design of Academic Documents",
+    "semester": "Fall 2024 (Example)",
+    "university": "Open Academic Institute",
+    "description": "A comprehensive course on structuring, authoring, and preserving academic knowledge using modern semantic tools.",
+    "authors": [
+      "Syllabus Viewer"
+    ]
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "title": "Introduction to Semantic Writing",
+      "subtitle": "Foundations of Semantic Text",
+      "content": [
+        "History of academic publishing",
+        "What is semantic text?",
+        "Separation of content and form",
+        "Introduction to plain text formats"
+      ],
+      "objectives": [
+        "Explain the importance of machine-readable academic documents.",
+        "Identify the core components of an academic paper."
+      ],
+      "activities": "Deconstruct a PDF paper into its semantic components (Abstract, Keywords, Sections, References) using a plain text editor.",
+      "evaluation": [
+        {
+          "type": "Formative",
+          "description": "Class Discussion: The longevity of PDF vs. HTML."
+        }
+      ],
+      "references": [
+        {
+          "text": "Berners-Lee, T. (2001). The Semantic Web.",
+          "pages": "Scientific American"
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "title": "Markdown & Structured Text",
+      "subtitle": "Syntax and Hierarchy",
+      "content": [
+        "Markdown syntax basics",
+        "Extended syntax (tables, footnotes)",
+        "Document structure: Headers and hierarchy",
+        "Lists and logical grouping"
+      ],
+      "objectives": [
+        "Write a complete academic essay using valid Markdown syntax.",
+        "and logical heading hierarchies.",
+        "Implement complex content structures like nested lists and blockquotes."
+      ],
+      "activities": "Lab: Convert a legacy Word document into clean, semantic Markdown.",
+      "evaluation": [
+        {
+          "type": "Summative",
+          "description": "Assignment 1: Submit your first semantic draft."
+        }
+      ],
+      "references": [
+        {
+          "text": "Gruber, J. (2004). Daring Fireball: Markdown Syntax Documentation."
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "title": "Metadata & Frontmatter",
+      "subtitle": "Describing Data with Metadata",
+      "content": [
+        "YAML Header structure",
+        "Defining authorship and affiliation",
+        "Keywords and classification",
+        "Linking external assets"
+      ],
+      "objectives": [
+        "Embed rich metadata into documents using YAML frontmatter.",
+        "Standardize author information for citation systems.",
+        "Manage document versioning through metadata fields."
+      ],
+      "activities": "Workshop: Creating a unified metadata schema for a class journal.",
+      "evaluation": [
+        {
+          "type": "Formative",
+          "description": "Peer Review: Check metadata completeness of partner's document."
+        }
+      ],
+      "references": [
+        {
+          "text": "The Dublin Core Metadata Initiative."
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "title": "Digital Preservation & Export",
+      "subtitle": "Formats and Accessibility",
+      "content": [
+        "Pandoc and document conversion",
+        "Archival formats (PDF/A, XML)",
+        "Accessibility in semantic documents",
+        "Future-proofing research"
+      ],
+      "objectives": [
+        "Convert semantic source files into various publication formats.",
+        "Ensure documents meet accessibility standards (WCAG) automatically.",
+        "Discuss strategies for long-term digital preservation."
+      ],
+      "activities": "Final Project: Build a multi-format export pipeline for a thesis chapter.",
+      "evaluation": [
+        {
+          "type": "Summative",
+          "description": "Final Exam: Theoretical concepts and practical conversion tasks."
+        }
+      ],
+      "references": [
+        {
+          "text": "Library of Congress. Sustainability of Digital Formats."
+        }
+      ]
+    }
+  ]
+}

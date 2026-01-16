@@ -1,0 +1,16 @@
+name: myst-course-starter
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandoc
+  - nodejs>=20
+  - git
+  # - jupyterlab
+  # - quarto
+  - pip
+  - pyyaml
+  - pre-commit
+  - pip:
+      - mystmd
+      # - jupyter-book
