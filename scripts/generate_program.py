@@ -1,73 +1,41 @@
+#!/usr/bin/env python3
 import argparse
-import json
 import os
-import yaml
+import sys
 
-# Translations
-TRANSLATIONS = {
-    'es': {
-        'university': 'Universidad',
-        'code': 'Código',
-        'semester': 'Semestre',
-        'description': 'Descripción del Curso',
-        'objectives': 'Objetivos Generales',
-        'methodology': 'Metodología',
-        'evaluation': 'Evaluación',
-        'schedule': 'Cronograma',
-        'placeholder_objectives': 'Los objetivos generales del curso se detallarán aquí.',
-        'placeholder_methodology': 'La metodología del curso se describirá aquí.',
-        'placeholder_evaluation': 'Las reglas de evaluación se detallarán aquí.',
-        'generated_by': 'Generado automáticamente a partir de planeamiento.json'
-    },
-    'en': {
-        'university': 'University',
-        'code': 'Code',
-        'semester': 'Semester',
-        'description': 'Course Description',
-        'objectives': 'General Objectives',
-        'methodology': 'Methodology',
-        'evaluation': 'Evaluation',
-        'schedule': 'Schedule',
-        'placeholder_objectives': 'General course objectives will be detailed here.',
-        'placeholder_methodology': 'Course methodology will be described here.',
-        'placeholder_evaluation': 'Evaluation rules will be detailed here.',
-        'generated_by': 'Automatically generated from planeamiento.json'
-    },
-    'fr': {
-        'university': 'Université',
-        'code': 'Code',
-        'semester': 'Semestre',
-        'description': 'Description du Cours',
-        'objectives': 'Objectifs Généraux',
-        'methodology': 'Méthodologie',
-        'evaluation': 'Évaluation',
-        'schedule': 'Calendrier',
-        'placeholder_objectives': 'Les objectifs généraux du cours seront détaillés ici.',
-        'placeholder_methodology': 'La méthodologie du cours sera décrite ici.',
-        'placeholder_evaluation': 'Les règles d\'évaluation seront détaillées ici.',
-        'generated_by': 'Généré automatiquement à partir de planeamiento.json'
-    }
+# Add local directory to path to allow imports if running directly
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-}
+try:
+    from utils import (
+        load_json, TRANSLATIONS
+    )
+except ImportError:
+    # Fallback for when running from root
+    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts'))
+    from utils import (
+        load_json, TRANSLATIONS
+    )
 
-def main():
-    parser = argparse.ArgumentParser(description='Generate programa.md from planeamiento.json')
-    parser.add_argument('--lang', default='es', choices=['es', 'en', 'fr'], help='Language for headers')
-    parser.add_argument('--init', action='store_true', help='Only create if missing (do not overwrite)')
-    args = parser.parse_args()
+def run(lang: str = 'es', init: bool = False):
+    """
+    Generates programa.md.
     
+    Args:
+        lang (str): Language code.
+        init (bool): Only create if missing.
+    """
     output_file = 'programa.md'
-    if args.init and os.path.exists(output_file):
+    if init and os.path.exists(output_file):
         print(f"Skipping {output_file}: already exists (and --init flag used).")
         return
 
-    t = TRANSLATIONS.get(args.lang, TRANSLATIONS['es'])
+    t = TRANSLATIONS.get(lang, TRANSLATIONS['es'])
     
     try:
-        with open('planeamiento.json', 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            metadata = data.get('metadata', {})
-            weeks = data.get('weeks', [])
+        data = load_json()
+        metadata = data.get('metadata', {})
+        weeks = data.get('weeks', [])
     except Exception as e:
         print(f"Error reading planeamiento.json: {e}")
         return
@@ -81,6 +49,11 @@ def main():
     authors = metadata.get('authors', [])
     author_name = authors[0] if isinstance(authors, list) and authors else "Instructor"
 
+    # Define placeholders if not in translations (fallback)
+    t.setdefault('placeholder_objectives', 'General course objectives will be detailed here.')
+    t.setdefault('placeholder_methodology', 'Course methodology will be described here.')
+    t.setdefault('placeholder_evaluation', 'Evaluation rules will be detailed here.')
+
     # Build Content
     md_content = f"""---
 title: {title}
@@ -92,9 +65,9 @@ author: {author_name}
 
 |  |  |
 | :--- | :--- |
-| **{t['university']}** | {university} |
-| **{t['code']}** | {code} |
-| **{t['semester']}** | {semester} |
+| **{t.get('university', 'University')}** | {university} |
+| **{t.get('code', 'Code')}** | {code} |
+| **{t.get('semester', 'Semester')}** | {semester} |
 
 ## 📝 {t['description']}
 
@@ -104,7 +77,7 @@ author: {author_name}
 
 {t['placeholder_objectives']}
 
-## 🧠 {t['methodology']}
+## 🧠 {t.get('methodology', 'Methodology')}
 
 {t['placeholder_methodology']}
 
@@ -112,12 +85,16 @@ author: {author_name}
 
 {t['placeholder_evaluation']}
 
-## 📅 {t['schedule']}
+## 📅 {t.get('schedule', 'Schedule')}
 
 """
     # Append simple schedule from weeks
     if weeks:
-        md_content += "| " + t['code'].replace('Code','Week').replace('Código', 'Semana').replace('Code', 'Semaine') + " | Title | Content |\n"
+        # Simple hack for translation of 'Code' to 'Week' equivalent in table header if needed
+        # But let's just use generic or translated headers
+        week_header = t.get('week', 'Week')
+        
+        md_content += f"| {week_header} | Title | Content |\n"
         md_content += "| :--- | :--- | :--- |\n"
         for w in weeks:
             num = w.get('week', '?')
@@ -132,6 +109,14 @@ author: {author_name}
         f.write(md_content)
     
     print(f"✅ Generated {output_file}")
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate programa.md from planeamiento.json')
+    parser.add_argument('--lang', default='es', choices=['es', 'en', 'fr'], help='Language for headers')
+    parser.add_argument('--init', action='store_true', help='Only create if missing (do not overwrite)')
+    args = parser.parse_args()
+    
+    run(lang=args.lang, init=args.init)
 
 if __name__ == "__main__":
     main()

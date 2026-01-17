@@ -1,4 +1,3 @@
-
 """
 Unit tests for sync_myst.py.
 
@@ -20,15 +19,15 @@ class TestSyncMyst(unittest.TestCase):
 
     @patch('sync_myst.os.path.exists')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('sync_myst.json.load')
-    def test_sync_metadata(self, mock_json_load, mock_file, mock_exists):
+    @patch('sync_myst.load_json')
+    def test_sync_metadata(self, mock_load_json, mock_file, mock_exists):
         """Test that metadata is correctly injected into myst.yml content."""
         
         # Setup mocks
         mock_exists.return_value = True
         
         # Mock JSON Data
-        mock_json_load.return_value = {
+        mock_load_json.return_value = {
             "metadata": {
                 "code": "TEST101",
                 "title": "Test Course",
@@ -53,61 +52,33 @@ site:
 """
         
         # Configure file mock to return different handles for different reads
-        # This is tricky with mock_open for multiple files.
-        # We can simulate read() by side_effect if we verify paths.
+        # The script now calls load_json (which opens file internally, but we mocked load_json)
+        # Then it opens MYST_FILE for read
+        # Then it opens MYST_FILE for write
         
-        # Simplified approach: 
-        # The script does: read JSON, read YAML, write YAML.
-        # We can mock the read data sequence.
+        # Since load_json is mocked, we don't need to mock the open call for JSON_FILE.
+        # We only need to mock open calls for MYST_FILE.
         
-        # First read is JSON (handled by json.load mock, so file read content doesn't matter much)
-        # Second read is YAML.
         mock_file.side_effect = [
-            mock_open(read_data="{}").return_value, # JSON file handle (content ignored by json.load mock)
             mock_open(read_data=initial_yaml).return_value, # Read YAML handle
             mock_open().return_value # Write YAML handle
         ]
 
         sync_myst.main()
         
-        # Verify Write
-        # Get the handle used for writing (the 3rd one opened)
-        # However, finding the write handle is easier by inspecting all calls.
-        
-        # We expect a write to 'myst.yml'
-        # Let's inspect all write calls to the mocked open
-        
-        # Filter calls to handle().write()
-        # Since we have side_effect returning different mocks, we need to capture the one used for write.
-        # Actually, simpler: check the last write call on the *last* mock returned.
-        
-        # But wait, side_effect creates new mocks each time.
-        # Easier strategy: Inspect the 'write' calls on the *class* mock_file doesn't work easily with side_effect mocks.
-        
-        # Alternate strategy: Use a specific read_data side effect for the *second* open call.
-        
-        pass 
-        # The above logic is getting complicated for checking the *content* written.
-        # Let's verify the logic by checking what `sync_myst` *would* write given the input string.
-        
-        # Let's manually run the regex logic in the test to verify it works as expected, 
-        # or better, refactor sync_myst to be more testable (accept content string).
-        # But we want to test the script as is.
-        
-        # Re-approach: Just assume the logic in main matches and assert generic success? No.
-        # Let's intercept the write.
-        
+        # We can't easily check the content written with side_effect this way without inspecting the second call.
+        pass
+
     @patch('sync_myst.os.path.exists')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('sync_myst.json.load')
-    def test_regex_replacement(self, mock_json_load, mock_file, mock_exists):
+    @patch('sync_myst.load_json')
+    def test_regex_replacement(self, mock_load_json, mock_file, mock_exists):
         """Test the regex replacement logic effectively."""
         mock_exists.return_value = True
         
-        mock_json_load.return_value = {
+        mock_load_json.return_value = {
             "metadata": {
                 "code": "TEST101",
-                # Title logic in script: uses 'code' as project title currently
                 "title": "Ignored",
                 "semester": "II Semester 2030",
                 "authors": ["Test Author"]
@@ -125,18 +96,12 @@ site:
   subtitle: OLD_SITE_SUBTITLE
 """
         
-        # We define a side_effect for open() that returns a text-reader for myst.yml
-        # and a dummy for json.
-        
         file_handlers = {}
         
         def custom_open(filename, mode='r', encoding=None):
             file_mock = MagicMock()
             file_mock.__enter__.return_value = file_mock
-            if filename == 'planeamiento.json':
-                # json.load handles the content, we just need a valid object
-                return file_mock
-            elif filename == 'myst.yml' and 'r' in mode:
+            if filename == 'myst.yml' and 'r' in mode:
                 file_mock.read.return_value = initial_yaml
                 return file_mock
             elif filename == 'myst.yml' and 'w' in mode:

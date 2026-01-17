@@ -9,17 +9,6 @@ import scaffold_course
 
 class TestScaffoldCourse(unittest.TestCase):
 
-    @patch('scaffold_course.subprocess.run')
-    @patch('builtins.print')
-    @patch('pathlib.Path.exists')
-    def test_run_step_success(self, mock_exists, mock_print, mock_run):
-        """Test run_step executes command successfully."""
-        mock_run.return_value.returncode = 0
-        
-        scaffold_course.run_step("Test Step", ["echo", "test"])
-        
-        mock_run.assert_called_with(["echo", "test"], check=True, text=True)
-
     @patch('scaffold_course.sys.exit')
     @patch('builtins.input')
     @patch('pathlib.Path.exists')
@@ -36,35 +25,35 @@ class TestScaffoldCourse(unittest.TestCase):
             mock_input.assert_called_once()
             mock_exit.assert_called_with(0)
 
-    @patch('scaffold_course.subprocess.run')
+    @patch('scaffold_course.generate_sessions_table_json.run')
+    @patch('scaffold_course.inject_activity_header.run')
+    @patch('scaffold_course.update_toc.main')
+    @patch('scaffold_course.sync_myst.main')
+    @patch('scaffold_course.generate_sessions.run')
+    @patch('scaffold_course.generate_activities.run')
+    @patch('scaffold_course.generate_program.run')
+    @patch('scaffold_course.create_myst_config')
     @patch('builtins.input')
     @patch('pathlib.Path.exists')
-    def test_force_yes_skips_prompt(self, mock_exists, mock_input, mock_run):
-        """Test that --force --yes works without prompting."""
+    def test_force_yes_skips_prompt(self, mock_exists, mock_input, mock_create_config, mock_gen_prog, mock_gen_act, mock_gen_sess, mock_sync, mock_update_toc, mock_inject, mock_gen_table):
+        """Test that --force --yes works without prompting and calls all steps."""
         mock_exists.return_value = True
         
         with patch('argparse.ArgumentParser.parse_args') as mock_args:
             mock_args.return_value = MagicMock(force=True, yes=True, lang='es')
             
-            # Mock implicit subprocess calls to avoid actual execution
-            mock_run.return_value.returncode = 0
-            
-            # We expect main to run through without exiting or inputting
-            # However, main() does a lot of stuff. We should probably mock run_step too 
-            # or just verify input wasn't called.
-            
-            # To catch the end of main without errors, we might mock run_step calls.
-            # But run_step calls subprocess.run which we mocked.
-            # But the script also does direct Path operations (mkdir).
-            # Let's mock the other parts of main logic to isolate the prompt check.
-            
-            with patch('scaffold_course.Path.mkdir'), \
-                 patch('scaffold_course.open'), \
-                 patch('json.load'):
-                 
+            with patch('scaffold_course.Path.mkdir'):
                 scaffold_course.main()
                 
             mock_input.assert_not_called()
+            mock_create_config.assert_called()
+            mock_gen_prog.assert_called()
+            mock_gen_sess.assert_called()
+            mock_sync.assert_called()
+            mock_update_toc.assert_called()
+            mock_gen_act.assert_called()
+            mock_inject.assert_called()
+            mock_gen_table.assert_called()
 
 if __name__ == '__main__':
     unittest.main()

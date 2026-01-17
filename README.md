@@ -155,6 +155,13 @@ If you need granular control, you can run individual scripts:
   ```
 
 
+### Internal script architecture (overview)
+
+- Shared utilities live in `scripts/utils.py` (JSON loading, filenames, translations, output paths).
+- The main orchestrator `scripts/scaffold_course.py` calls generator scripts as importable modules instead of via subprocess.
+- Validation and overview helpers (`scripts/validate_frontmatter.py`, `scripts/generate_sessions_table_json.py`) reuse the same configuration and metadata as the generators.
+
+
 ## Deployment
 
 This template is configured to deploy automatically to GitHub Pages using GitHub Actions.

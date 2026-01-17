@@ -1,9 +1,26 @@
+"""
+Injects visual badges into activity markdown files based on frontmatter metadata.
+
+Reads activities from the configured directory and prepends Shields.io badges
+for type, duration, modality and difficulty in the selected language.
+"""
+
 import glob
 import re
 import yaml
 import os
-
+import sys
 import argparse
+
+# Add local directory to path to allow imports if running directly
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from utils import OUTPUT_DIR_ACTIVITIES
+except ImportError:
+    # Fallback for when running from root
+    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts'))
+    from utils import OUTPUT_DIR_ACTIVITIES
 
 # Translations configuration
 TRANSLATIONS = {
@@ -127,15 +144,25 @@ def process_file(filepath, lang='es'):
     else:
         print(f"No changes needed for {filepath}")
 
+def run(lang: str = 'es'):
+    """
+    Injects activity badges into activity files.
+    
+    Args:
+        lang (str): Language code.
+    """
+    search_path = os.path.join(OUTPUT_DIR_ACTIVITIES, "*.md")
+    files = sorted(glob.glob(search_path))
+    print(f"Found {len(files)} activity files. Language: {lang}")
+    for f in files:
+        process_file(f, lang=lang)
+
 def main():
     parser = argparse.ArgumentParser(description='Inject badges into activity files.')
     parser.add_argument('--lang', default='es', choices=['es', 'en', 'fr'], help='Language for badge labels')
     args = parser.parse_args()
     
-    files = sorted(glob.glob("activities/*.md"))
-    print(f"Found {len(files)} activity files. Language: {args.lang}")
-    for f in files:
-        process_file(f, lang=args.lang)
+    run(lang=args.lang)
 
 if __name__ == "__main__":
     main()

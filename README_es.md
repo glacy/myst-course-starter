@@ -137,6 +137,27 @@ python3 scripts/scaffold_course.py [--lang {es,en,fr}] [--force]
 -   `--force`: Sobrescribe archivos existentes. **Incluye una confirmación interactiva para prevenir la pérdida accidental de datos.**
 
 
+### 3.1 Flujo completo de generación
+
+```text
+planeamiento.json
+        │
+        ▼
+python3 scripts/scaffold_course.py
+        │
+        ├─ Lee metadatos y semanas (utils.load_json)
+        ├─ Genera myst.yml y programa.md
+        ├─ Genera sessions/ y activities/
+        └─ Actualiza TOC y tablas de resumen
+        │
+        ▼
+myst start
+        │
+        ▼
+Sitio MyST servido en http://localhost:3000
+```
+
+
 ### 4. Ejecución del servidor local
 
 Una vez configurado y verificado el entorno, puedes iniciar el servidor de desarrollo:
@@ -176,6 +197,13 @@ Si necesitas control granular, puedes ejecutar scripts individuales:
   ```bash
   python3 scripts/inject_activity_header.py --lang en
   ```
+
+
+### Notas de arquitectura interna de scripts
+
+- Las utilidades compartidas residen en `scripts/utils.py` (carga de JSON, nombres de archivo, traducciones, rutas de salida).
+- El orquestador principal `scripts/scaffold_course.py` invoca los demás generadores como módulos importables en lugar de subprocesos.
+- Los scripts de validación y resumen (`scripts/validate_frontmatter.py`, `scripts/generate_sessions_table_json.py`) reutilizan la misma configuración y metadatos que los generadores.
 
 
 ## Despliegue

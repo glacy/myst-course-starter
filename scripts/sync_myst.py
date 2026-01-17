@@ -7,11 +7,20 @@ in 'myst.yml' to ensure consistency with the centralized course metadata.
 It uses regex patterns to preserve existing comments and structure in the YAML file.
 """
 
-import json
 import re
 import os
+import sys
 
-JSON_FILE = 'planeamiento.json'
+# Add local directory to path to allow imports if running directly
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from utils import load_json, JSON_FILE
+except ImportError:
+    # Fallback for when running from root
+    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts'))
+    from utils import load_json, JSON_FILE
+
 MYST_FILE = 'myst.yml'
 
 def main():
@@ -21,12 +30,11 @@ def main():
 
     # Read Metadata
     try:
-        with open(JSON_FILE, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            metadata = data.get('metadata', {})
-            if not metadata:
-                print("No metadata found in planeamiento.json")
-                return
+        data = load_json(JSON_FILE)
+        metadata = data.get('metadata', {})
+        if not metadata:
+            print("No metadata found in planeamiento.json")
+            return
     except Exception as e:
         print(f"Error reading JSON: {e}")
         return

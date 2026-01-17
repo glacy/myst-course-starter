@@ -11,9 +11,19 @@ It uses regex to preserve the existing structure (comments, other children like 
 import glob
 import re
 import os
+import sys
+
+# Add local directory to path to allow imports if running directly
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from utils import OUTPUT_DIR_SESSIONS
+except ImportError:
+    # Fallback for when running from root
+    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts'))
+    from utils import OUTPUT_DIR_SESSIONS
 
 MYST_FILE = 'myst.yml'
-SESSIONS_DIR = 'sessions'
 
 def main():
     if not os.path.exists(MYST_FILE):
@@ -23,13 +33,13 @@ def main():
     with open(MYST_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    print(f"Scanning {SESSIONS_DIR} for updates...")
+    print(f"Scanning {OUTPUT_DIR_SESSIONS} for updates...")
     
     updated_count = 0
     
     # Iterate through potential weeks (1 to 20 to be safe)
     # Or just glob all files in sessions
-    session_files = sorted(glob.glob(os.path.join(SESSIONS_DIR, '[0-9][0-9]-*.md')))
+    session_files = sorted(glob.glob(os.path.join(OUTPUT_DIR_SESSIONS, '[0-9][0-9]-*.md')))
     
     for file_path in session_files:
         basename = os.path.basename(file_path)
@@ -44,18 +54,8 @@ def main():
         # Looking for: "file: sessions/01-old-name.md"
         # We match "file: sessions/01-.*\.md"
         
-        # Note: We use forward slashes for paths in YAML usually
-        pattern = fr'(file:\s*sessions/{prefix}-).*\.md'
-        
-        # Check if it needs update
-        # We replace the whole filename part
-        replacement = f'\\1{basename[3:]}' # \1 is "file: sessions/01-", basename[3:] is "new-name.md"
-        
-        # Or simpler: replace strict group
-        # pattern: (file:\s*sessions/)(01-.*\.md)
-        # repl: \1basename
-        
-        pattern = fr'(file:\s*sessions/)({prefix}-.*\.md)'
+        folder_name = os.path.basename(OUTPUT_DIR_SESSIONS)
+        pattern = fr'(file:\s*{folder_name}/)({prefix}-.*\.md)'
         
         # Perform replacement
         new_content = re.sub(pattern, f'\\g<1>{basename}', content)

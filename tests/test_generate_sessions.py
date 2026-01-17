@@ -1,4 +1,3 @@
-
 """
 Unit tests for the generate_sessions.py script.
 
@@ -10,7 +9,6 @@ import unittest
 from unittest.mock import patch, mock_open, MagicMock
 import os
 import sys
-import json
 import argparse
 
 # Mock yaml module before importing generate_sessions
@@ -27,6 +25,7 @@ class TestGenerateSessions(unittest.TestCase):
 
     def test_generate_filename(self):
         """Test filename generation with various inputs."""
+        # Assuming generate_sessions re-exports generate_filename from utils
         self.assertEqual(generate_sessions.generate_filename(1, "Sesión de Introducción"), "01-sesion-de-introduccion.md")
         self.assertEqual(generate_sessions.generate_filename(2, "Ángulos y Energías"), "02-angulos-y-energias.md")
         self.assertEqual(generate_sessions.generate_filename(10, "  Trim Spaces  "), "10-trim-spaces.md")
@@ -34,25 +33,28 @@ class TestGenerateSessions(unittest.TestCase):
 
     @patch('generate_sessions.os.makedirs')
     @patch('generate_sessions.os.path.exists')
-    @patch('generate_sessions.json.load')
+    @patch('generate_sessions.load_json')
     @patch('builtins.open', new_callable=mock_open)
     @patch('argparse.ArgumentParser.parse_args')
-    def test_main_standard_generation(self, mock_args, mock_file, mock_json_load, mock_exists, mock_makedirs):
+    def test_main_standard_generation(self, mock_args, mock_file, mock_load_json, mock_exists, mock_makedirs):
         """Test standard generation flow."""
         # Setup mocks
         mock_args.return_value = argparse.Namespace(week=None, force=False, lang='es')
         mock_exists.side_effect = lambda x: False # Output dir doesn't exist initially, file doesn't exist
-        mock_json_load.return_value = [
-            {
-                "week": 1,
-                "title": "Contenido 1",
-                "content": ["Contenido 1"],
-                "objectives": ["Obj 1"],
-                "activities": "Activity 1",
-                "evaluation": [{"type": "Test", "description": "Desc"}],
-                "references": [{"text": "Ref 1"}]
-            }
-        ]
+        mock_load_json.return_value = {
+            "weeks": [
+                {
+                    "week": 1,
+                    "title": "Contenido 1",
+                    "content": ["Contenido 1"],
+                    "objectives": ["Obj 1"],
+                    "activities": "Activity 1",
+                    "evaluation": [{"type": "Test", "description": "Desc"}],
+                    "references": [{"text": "Ref 1"}]
+                }
+            ],
+            "metadata": {}
+        }
 
         generate_sessions.main()
 
@@ -91,16 +93,19 @@ class TestGenerateSessions(unittest.TestCase):
 
     @patch('generate_sessions.os.makedirs')
     @patch('generate_sessions.os.path.exists')
-    @patch('generate_sessions.json.load')
+    @patch('generate_sessions.load_json')
     @patch('builtins.open', new_callable=mock_open)
     @patch('argparse.ArgumentParser.parse_args')
-    def test_main_skip_existing_without_force(self, mock_args, mock_file, mock_json_load, mock_exists, mock_makedirs):
+    def test_main_skip_existing_without_force(self, mock_args, mock_file, mock_load_json, mock_exists, mock_makedirs):
         """Test that the script skips existing files if --force is not provided."""
         mock_args.return_value = argparse.Namespace(week=None, force=False, lang='es')
         
-        mock_json_load.return_value = [
-            {"week": 1, "title": "Topic", "content": ["Topic"]}
-        ]
+        mock_load_json.return_value = {
+            "weeks": [
+                {"week": 1, "title": "Topic", "content": ["Topic"]}
+            ],
+            "metadata": {}
+        }
 
         def exists_side_effect(path):
             if path == 'sessions': return True
@@ -118,16 +123,19 @@ class TestGenerateSessions(unittest.TestCase):
 
     @patch('generate_sessions.os.makedirs')
     @patch('generate_sessions.os.path.exists')
-    @patch('generate_sessions.json.load')
+    @patch('generate_sessions.load_json')
     @patch('builtins.open', new_callable=mock_open)
     @patch('argparse.ArgumentParser.parse_args')
-    def test_main_force_overwrite(self, mock_args, mock_file, mock_json_load, mock_exists, mock_makedirs):
+    def test_main_force_overwrite(self, mock_args, mock_file, mock_load_json, mock_exists, mock_makedirs):
         """Test that the script overwrites existing files if --force IS provided."""
         mock_args.return_value = argparse.Namespace(week=None, force=True, lang='es')
         
-        mock_json_load.return_value = [
-            {"week": 1, "title": "Topic", "content": ["Topic"]}
-        ]
+        mock_load_json.return_value = {
+            "weeks": [
+                {"week": 1, "title": "Topic", "content": ["Topic"]}
+            ],
+            "metadata": {}
+        }
 
         def exists_side_effect(path):
             if path == 'sessions': return True
@@ -145,18 +153,21 @@ class TestGenerateSessions(unittest.TestCase):
 
     @patch('generate_sessions.os.makedirs')
     @patch('generate_sessions.os.path.exists')
-    @patch('generate_sessions.json.load')
+    @patch('generate_sessions.load_json')
     @patch('builtins.open', new_callable=mock_open)
     @patch('argparse.ArgumentParser.parse_args')
-    def test_main_filter_week(self, mock_args, mock_file, mock_json_load, mock_exists, mock_makedirs):
+    def test_main_filter_week(self, mock_args, mock_file, mock_load_json, mock_exists, mock_makedirs):
         """Test generating a specific week."""
         mock_args.return_value = argparse.Namespace(week=2, force=False, lang='es')
         mock_exists.return_value = False
         
-        mock_json_load.return_value = [
-            {"week": 1, "title": "Topic 1", "content": ["Topic 1"]},
-            {"week": 2, "title": "Topic 2", "content": ["Topic 2"]}
-        ]
+        mock_load_json.return_value = {
+            "weeks": [
+                {"week": 1, "title": "Topic 1", "content": ["Topic 1"]},
+                {"week": 2, "title": "Topic 2", "content": ["Topic 2"]}
+            ],
+            "metadata": {}
+        }
 
         generate_sessions.main()
 
